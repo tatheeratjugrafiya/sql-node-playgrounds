@@ -1,4 +1,5 @@
 import httpStatus from "http-status";
+import { ApiResponse } from "../utils/api-response.js";
 
 export function validateMiddleware(schema) {
   return async function validate(req, res, next) {
@@ -13,7 +14,15 @@ export function validateMiddleware(schema) {
       req.params = data.params;
       return next();
     } catch (error) {
-      return res.status(httpStatus.BAD_REQUEST).json(error);
+      return res.status(httpStatus.BAD_REQUEST).json(
+        new ApiResponse(
+          httpStatus.BAD_REQUEST,
+          error?.issues?.map((issue) => ({
+            [issue?.path?.[1]]: issue?.message,
+          })),
+          "Validation failed"
+        )
+      );
     }
   };
 }
