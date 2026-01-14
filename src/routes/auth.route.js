@@ -5,6 +5,7 @@ import {
   insertUserSchema,
   loginUserSchema,
   forgotPasswordSchema,
+  refreshTokenSchema,
 } from "../db/users.schema.js";
 
 const router = express.Router();
@@ -21,5 +22,8 @@ router
     validateMiddleware(forgotPasswordSchema),
     authController.forgotPassword
   );
+router
+  .route("/refresh-tokens")
+  .post(validateMiddleware(refreshTokenSchema), authController.refreshTokens);
 
 export { router as authRouter };

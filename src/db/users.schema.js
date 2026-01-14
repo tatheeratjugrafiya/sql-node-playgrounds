@@ -78,3 +78,9 @@ export const resetPasswordSchema = z.object({
     password: validPassword,
   }),
 });
+
+export const refreshTokenSchema = z.object({
+  body: z.object({
+    refreshToken: z.string(),
+  }),
+});

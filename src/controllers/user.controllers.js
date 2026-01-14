@@ -6,7 +6,11 @@ class UserController {
     return res
       .status(httpStatus.OK)
       .json(
-        new ApiResponse(httpStatus.OK, ROLES, "Roles fetched successfully.")
+        new ApiResponse(
+          httpStatus.OK,
+          { ...ROLES, ...(req?.user && req?.user) },
+          "Roles fetched successfully."
+        )
       );
   }
 }

@@ -4,6 +4,8 @@ import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { users } from "../db/schema.js";
 import ApiError from "../utils/api-error.js";
+import { TOKEN_TYPES } from "../config/tokens.js";
+import * as tokenService from "./token.service.js";
 
 /**
  * Create a user
@@ -59,4 +61,42 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-export { createUser, loginUserWithEmailAndPassword, getUserByEmail };
+/**
+ * Get user by id
+ * @param {ObjectId} id
+ * @returns {Promise<User>}
+ */
+const getUserById = async (id) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, id),
+  });
+  return user;
+};
+
+/**
+ * Refresh auth tokens
+ * @param {string} refreshToken
+ * @returns {Promise<Object>}
+ */
+const refreshAuth = async (refreshToken) => {
+  try {
+    const refreshTokenDoc = await tokenService.verifyToken(
+      refreshToken,
+      TOKEN_TYPES.REFRESH
+    );
+    const user = await getUserById(refreshTokenDoc.sub);
+    if (!user) {
+      throw new Error();
+    }
+    return tokenService.generateAuthTokens(user);
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
+  }
+};
+
+export {
+  createUser,
+  loginUserWithEmailAndPassword,
+  getUserByEmail,
+  refreshAuth,
+};

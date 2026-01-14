@@ -10,12 +10,10 @@ const router = express.Router();
 
 router.route("/all-roles").get(userController.getAllRoles);
 
-router
-  .route("/test-role")
-  .get(
-    authenticateUser,
-    authorizeRole(ROLES.Client),
-    userController.getAllRoles
-  );
+router.route("/test-role").get(
+  authenticateUser,
+  // authorizeRole(ROLES.Client),
+  userController.getAllRoles
+);
 
 export { router as userRouter };

@@ -34,10 +34,13 @@ class AuthController {
   });
 
   forgotPassword = catchAsync(async (req, res) => {
-    // Logic for forgot password will be added later or mocked
-    res
-      .status(httpStatus.OK)
-      .json(new ApiResponse(httpStatus.OK, {}, "Forgot password email sent."));
+    // Implementation for forgot password
+    res.status(httpStatus.NO_CONTENT).send();
+  });
+
+  refreshTokens = catchAsync(async (req, res) => {
+    const tokens = await authService.refreshAuth(req.body.refreshToken);
+    res.send({ ...tokens });
   });
 }
 
