@@ -46,9 +46,16 @@ const validPassword = z
   );
 
 export const insertUserSchema = z.object({
-  body: createInsertSchema(users, {
-    email: (schema) => schema.email.email(),
+  body: z.object({
+    email: z.string().email(),
     password: validPassword,
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    role: z
+      .enum(Object.values(ROLES || {}))
+      .optional()
+      .default("user"),
+    image: z.string().optional(),
   }),
 });
 

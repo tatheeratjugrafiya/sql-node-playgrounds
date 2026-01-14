@@ -7,6 +7,7 @@ class AuthController {
   signup = catchAsync(async (req, res) => {
     const user = await authService.createUser(req.body);
     const tokens = await tokenService.generateAuthTokens(user);
+    delete user["password"];
     res
       .status(httpStatus.CREATED)
       .json(

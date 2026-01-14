@@ -15,6 +15,7 @@ const createUser = async (userBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   }
   const hashedPassword = await bcrypt.hash(userBody.password, 8);
+  //   return { ...userBody };
   const [user] = await db
     .insert(users)
     .values({ ...userBody, password: hashedPassword })
