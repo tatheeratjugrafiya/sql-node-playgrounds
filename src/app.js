@@ -39,7 +39,7 @@ app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
 // api routes
-app.use("/api", routes);
+app.use("/api/v1/", routes);
 
 // api-docs
 const specs = swaggerJsdoc({

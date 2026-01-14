@@ -5,6 +5,7 @@
   "scripts": {
     "start": "pm2 start ecosystem.config.json",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "prod": "cross-env NODE_ENV=local nodemon index.js",
     "drizzle:studio": "drizzle-kit studio",
     "drizzle:db-push": "drizzle-kit push:pg",
     "drizzle:migration-generate": "drizzle-kit generate:pg",
