@@ -1,4 +1,14 @@
-import "dotenv/config.js";
+import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+
+if (process.env.NODE_ENV) {
+  const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+  }
+}
+dotenv.config();
 import z from "zod";
 
 import logger from "./logger.js";
@@ -11,13 +21,23 @@ const EnvVariables = z.object({
   POSTGRESQL_USER: z.string(),
   POSTGRESQL_PASSWORD: z.string(),
   JWT_SECRET: z.string(),
-  JWT_ACCESS_EXPIRATION_MINUTES: z.preprocess((a) => +a, z.number().default(30)),
+  JWT_ACCESS_EXPIRATION_MINUTES: z.preprocess(
+    (a) => +a,
+    z.number().default(30)
+  ),
   JWT_REFRESH_EXPIRATION_DAYS: z.preprocess((a) => +a, z.number().default(30)),
-  JWT_RESET_PASSWORD_EXPIRATION_MINUTES: z.preprocess((a) => +a, z.number().default(10)),
-  JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: z.preprocess((a) => +a, z.number().default(10)),
+  JWT_RESET_PASSWORD_EXPIRATION_MINUTES: z.preprocess(
+    (a) => +a,
+    z.number().default(10)
+  ),
+  JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: z.preprocess(
+    (a) => +a,
+    z.number().default(10)
+  ),
 });
 
 let envVars;
+console.log("W ", process.env.W);
 
 try {
   envVars = EnvVariables.parse(process.env);
